@@ -77,10 +77,6 @@
         aws ec2 import-image --description "My server VM" --disk-containers "file://containers.json"
       register: result
 
-    - name: debug
-      debug:
-          var:  result.stdout_lines[1].split(':')[1]
-
     - name: Use the describe-import-image-tasks command to return the status of an import task. 
       command: 
         aws ec2 describe-import-image-tasks --import-task-ids {{ result.stdout_lines[1].split(':')[1] }}
