@@ -8,5 +8,6 @@ Ansible automation can do anything to avoid boredum. This project has two playbo
 In addition I have pasted another playbook to launch an instance using the same AMI.
 
 # Requirements
-- Ansible
+- Ansible Installed
 - AWS CLI configured
+- Read AWS guide for recommendations before running a VM export.
