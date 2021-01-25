@@ -1,0 +1,91 @@
+- name: Playbook to Create and Manage the AWS S3 bucket
+  hosts: localhost
+
+  vars_files:
+  - /home/controller/ansible_playbooks/ansible_aws_migration/external_vars.yml
+
+  vars_prompt:
+
+    - name: aws_bucket_name
+      prompt: Enter the name of the bucket for importing OVA template
+      private: no
+
+    - name: ObjectSource
+      prompt: Enter the source from where you want to get the object
+      private: no
+
+    - name: ObjectDestination
+      prompt: Enter the destination where you want to put the object
+      private: no
+
+  tasks:
+
+    - name: Create an S3 bucket to upload the exported OVA.
+      amazon.aws.s3_bucket:
+        name: "{{ aws_bucket_name }}"
+        state: present
+        encryption: aws:kms
+      tags:
+      - bucket_create
+
+
+    - name: Upload an object to the  bucket
+      aws_s3:
+        bucket: "{{ aws_bucket_name }}"
+        object: "{{ ObjectSource }}"
+        src: "{{ ObjectDestination }}"
+        mode: put
+      tags:
+        - bucket_upload
+
+    - name: Create IAM user with API Keys.
+      community.aws.iam:
+        iam_type: user
+        name: sachin
+        state: present
+        password: "{{ temp_pass }}"
+        # password: "{{ lookup('password', 'passwordfile chars=ascii_letters') }}"
+        trust_policy_filepath: trust-policy.json
+        access_key_state: create
+
+    - name: Create IAM role
+      community.aws.iam:
+        iam_type: role
+        name: vmimport
+        state: present
+        trust_policy:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Principal:
+              Service: vmie.amazonaws.com
+            Action: sts:AssumeRole
+            Condition:
+              StringEquals:
+                sts:Externalid: vmimport
+
+    - name: Attach inline IAM policy for the role 
+      community.aws.iam_policy: 
+        iam_type: role
+        iam_name: vmimport
+        state: present
+        policy_name: vmimport
+        policy_json: " {{ lookup( 'file', 'role_policy.json') }} "
+        
+    - name: Use the following command to import an image with a single disk.
+      shell: |
+        aws ec2 import-image --description "My server VM" --disk-containers "file://containers.json"
+      register: result
+
+    - name: debug
+      debug:
+          var:  result.stdout_lines[1].split(':')[1]
+
+    - name: Use the describe-import-image-tasks command to return the status of an import task. 
+      command: 
+        aws ec2 describe-import-image-tasks --import-task-ids {{ result.stdout_lines[1].split(':')[1] }}
+      register: output
+    
+    - name: debug
+      debug:
+        var:  output
