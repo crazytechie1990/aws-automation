@@ -8,5 +8,5 @@ Ansible automation can do anything to avoid boredum. This project has two playbo
 In addition I have pasted another playbook to launch an instance using the AMI.
 
 # Requirements
-Ansible
-AWS CLI configured
+- Ansible
+- AWS CLI configured
