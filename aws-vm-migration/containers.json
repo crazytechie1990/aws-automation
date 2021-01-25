@@ -4,6 +4,6 @@
     "Format": "ova",
     "UserBucket": {
         "S3Bucket": "mymigrationbucket01",
-        "S3Key": "tzm.ova"
+        "S3Key": "abc.ova"
     }
 }]
