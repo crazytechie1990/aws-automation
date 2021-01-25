@@ -15,7 +15,7 @@
       - bucket_create
 
 
-    - name: Upload an object to the  bucket
+    - name: Upload OVA to the bucket
       aws_s3:
         bucket: "{{ aws_bucket_name }}"
         object: "{{ ObjectSource }}"
