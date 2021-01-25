@@ -1,9 +1,0 @@
-[
-  {
-    "Description": "My Server OVA",
-    "Format": "ova",
-    "UserBucket": {
-        "S3Bucket": "mymigrationbucket01",
-        "S3Key": "tzm.ova"
-    }
-}]
