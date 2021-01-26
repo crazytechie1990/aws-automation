@@ -18,8 +18,8 @@
     - name: Upload an object to the  bucket
       aws_s3:
         bucket: "{{ aws_bucket_name }}"
-        object: "{{ ObjectSource }}"
-        src: "{{ ObjectDestination }}"
+        object: "{{ ObjectDestination }}"
+        src: "{{ ObjectSource }}"
         mode: put
       tags:
         - bucket_upload
