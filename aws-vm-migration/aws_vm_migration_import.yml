@@ -15,16 +15,16 @@
       - bucket_create
 
 
-    # - name: Upload an object to the  bucket
-    #   aws_s3:
-    #     bucket: "{{ aws_bucket_name }}"
-    #     object: "{{ ObjectDestination }}"
-    #     src: "{{ ObjectSource }}"
-    #     mode: put
-    #     overwrite: never
-    #   tags:
-    #     - bucket_upload
-    #   when: 
+    - name: Upload an object to the  bucket
+      aws_s3:
+        bucket: "{{ aws_bucket_name }}"
+        object: "{{ ObjectDestination }}"
+        src: "{{ ObjectSource }}"
+        mode: put
+        overwrite: never
+      tags:
+        - bucket_upload
+      when: 
 
     - name: Create IAM user with API Keys.
       community.aws.iam:
@@ -62,19 +62,24 @@
         
     - name: Use the following command to import an image with a single disk.
       shell: |
-        aws ec2 import-image --description "MyserverVM" --disk-containers "file://containers.json"
+        aws ec2 import-image --description "MyserverVM" --disk-containers "file://containers.json" --tag-specifications ResourceType=import-image-task,Tags="{Key=name,Value=ansible_ami}"
       register: result
       tags:
           - import_ami
 
+    - ansible.builtin.debug:
+        var: result
+
     - name: Use the describe-import-image-tasks command to return the status of an import task. 
       shell: | 
         aws ec2 describe-import-image-tasks --import-task-ids {{ result.stdout_lines[1].split(':')[1] }}
-        echo "Please be patient, AMI import is in progress"
       register: output
       retries: 50
       delay: 10
-      until: "{{ output.StatusMessage  ==  completed }}"
+      until: output.rc == 0
+     
+    - ansible.builtin.debug:
+        var: output
     
     - name: Image find
       ec2_ami_info:
@@ -82,10 +87,5 @@
           "tag:Name": ansible_ami
       register: ami_find
     
-    - name: Create a test instance using above AMI  
-      amazon.aws.ec2:
-        instance_type: t2.micro
-        image: "{{ ami_find }}"
-        wait: yes
-        count: 1
-        assign_public_ip: yes
+    - ansible.builtin.debug:
+        var: "{{ ami_find }}"
