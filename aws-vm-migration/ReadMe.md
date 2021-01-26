@@ -1,4 +1,4 @@
-*** Please note all these playbooks are uploaded only with a purpose of sharing knowledge. Test them and customize them as per you infrastructure. Conside these as samples. ***
+### Please note all these playbooks are uploaded only with a purpose of sharing knowledge. Test them and customize them as per you infrastructure. Conside these as samples.
 
 # VM Migration Using Ansible
 
