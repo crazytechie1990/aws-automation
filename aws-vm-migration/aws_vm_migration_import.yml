@@ -21,8 +21,10 @@
         object: "{{ ObjectDestination }}"
         src: "{{ ObjectSource }}"
         mode: put
+        overwrite: never
       tags:
         - bucket_upload
+      when: 
 
     - name: Create IAM user with API Keys.
       community.aws.iam:
