@@ -66,26 +66,16 @@
       tags:
           - import_ami
 
-    - ansible.builtin.debug:
-        var: result
-
-    - name: Please note this is not a failure, import of an AMI takes a while so the playbook will not proceed until the AMI is imported.
+    - name: Describing the import-image command
       shell: | 
-        aws ec2 describe-import-image-tasks --import-task-ids import-ami-0903237399860f8d3
+        aws ec2 describe-import-image-tasks --import-task-ids import-ami-050a0c6d0f9026ac2
       register: output
-      retries: 30
-      delay: 60
-      until: output.stdout_lines[16].split(':')[1] == "completed "
       tags:
         - import_describe
     
-    - name: Image find
-      ec2_ami_info:
-        filters:
-          "tag:Name": ansible_ami
-      register: ami_find
-    
-    - ansible.builtin.debug:
-        var: "{{ ami_find }}"
-
+    - name: Imported AMI Details
+      ansible.builtin.debug:
+         msg: The ImportTaskId of the imported image is{{ output.stdout_lines[3].split(':')[1] }}. Please use the given command to verify the progress of import - aws ec2 describe-import-image-tasks --import-task-ids {{ output.stdout_lines[3].split(':')[1] }}
+      tags:
+        - debug_ami_output
     
