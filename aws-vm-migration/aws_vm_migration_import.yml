@@ -75,7 +75,7 @@
     
     - name: Imported AMI Details
       ansible.builtin.debug:
-         msg: The ImportTaskId of the imported image is{{ output.stdout_lines[3].split(':')[1] }}. Please use the given command to verify the progress of import - aws ec2 describe-import-image-tasks --import-task-ids {{ output.stdout_lines[3].split(':')[1] }}
+         msg: The ImportTaskId of the imported image is{{ output.stdout_lines[2].split(':')[1] }}. Please use the given command to verify the progress of import - aws ec2 describe-import-image-tasks --import-task-ids {{ output.stdout_lines[2].split(':')[1] }}
       tags:
         - debug_ami_output
     
