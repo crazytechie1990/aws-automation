@@ -15,16 +15,16 @@
       - bucket_create
 
 
-    - name: Upload an object to the  bucket
-      aws_s3:
-        bucket: "{{ aws_bucket_name }}"
-        object: "{{ ObjectDestination }}"
-        src: "{{ ObjectSource }}"
-        mode: put
-        overwrite: never
-      tags:
-        - bucket_upload
-      when: 
+    # - name: Upload an object to the  bucket
+    #   aws_s3:
+    #     bucket: "{{ aws_bucket_name }}"
+    #     object: "{{ ObjectDestination }}"
+    #     src: "{{ ObjectSource }}"
+    #     mode: put
+    #     overwrite: never
+    #   tags:
+    #     - bucket_upload
+   
 
     - name: Create IAM user with API Keys.
       community.aws.iam:
@@ -32,7 +32,6 @@
         name: sachin
         state: present
         password: "{{ temp_pass }}"
-        # password: "{{ lookup('password', 'passwordfile chars=ascii_letters') }}"
         trust_policy_filepath: trust-policy.json
         access_key_state: create
 
@@ -70,16 +69,15 @@
     - ansible.builtin.debug:
         var: result
 
-    - name: Use the describe-import-image-tasks command to return the status of an import task. 
+    - name: Please note this is not a failure, import of an AMI takes a while so the playbook will not proceed until the AMI is imported.
       shell: | 
-        aws ec2 describe-import-image-tasks --import-task-ids {{ result.stdout_lines[1].split(':')[1] }}
+        aws ec2 describe-import-image-tasks --import-task-ids import-ami-0903237399860f8d3
       register: output
-      retries: 50
-      delay: 10
-      until: output.rc == 0
-     
-    - ansible.builtin.debug:
-        var: output
+      retries: 30
+      delay: 60
+      until: output.stdout_lines[16].split(':')[1] == "completed "
+      tags:
+        - import_describe
     
     - name: Image find
       ec2_ami_info:
@@ -89,3 +87,5 @@
     
     - ansible.builtin.debug:
         var: "{{ ami_find }}"
+
+    
