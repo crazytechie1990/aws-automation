@@ -7,5 +7,5 @@ Sample projects for automating various tasks in Amazon Web Services(AWS).
 
 
 
-### Please note all these playbooks are uploaded only with a purpose of sharing knowledge. Test them and customize them as per you infrastructure. Conside these as samples.
+### Please note all these playbooks are uploaded only with a purpose of sharing knowledge. Test them and customize them as per you infrastructure. Conside them as samples.
 
