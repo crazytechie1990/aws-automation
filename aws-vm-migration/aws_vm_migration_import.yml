@@ -15,15 +15,15 @@
       - bucket_create
 
 
-    # - name: Upload an object to the  bucket
-    #   aws_s3:
-    #     bucket: "{{ aws_bucket_name }}"
-    #     object: "{{ ObjectDestination }}"
-    #     src: "{{ ObjectSource }}"
-    #     mode: put
-    #     overwrite: never
-    #   tags:
-    #     - bucket_upload
+    - name: Upload an object to the  bucket
+      aws_s3:
+        bucket: "{{ aws_bucket_name }}"
+        object: "{{ ObjectDestination }}"
+        src: "{{ ObjectSource }}"
+        mode: put
+        overwrite: never
+      tags:
+        - bucket_upload
    
 
     - name: Create IAM user with API Keys.
