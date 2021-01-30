@@ -1,0 +1,31 @@
+- name: Playbook to Import VM on to AWS.
+  hosts: localhost
+
+  vars_files:
+    - /home/controller/ansible_playbooks/ansible_aws_migration/external_vars.yml
+
+  tasks:
+  - name: Find the created AMI and create new instance from that AMI.
+    block:
+      - name: Find my AMI
+        ec2_ami_info:
+          filters:
+            "tag:Name": SachinAMI
+        register: my_AMI
+
+      - name: Debug
+        debug:
+          msg: AMI used for creating instance is {{ my_AMI.images[0].image_id }}
+        
+      - name: Launch new instance
+        community.aws.ec2_instance:
+           image_id: "{{ my_AMI}}"
+           key_name: "{{ my_aws_key }}"
+           name: Instance-Created-By-Ansible
+           region: us-east-1
+           state: stopped
+           termination_protection: yes
+
+    rescue:
+      - debug:
+          msg: "We've caught an error during new instance creation."
