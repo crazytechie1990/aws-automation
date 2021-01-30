@@ -2,4 +2,5 @@ temp_pass: <Your Password>
 aws_bucket_name: <Enter your bucket name>    
 ObjectSource: <Source>
 ObjectDestination: <Destination>
+my_aws_key: <YourAWSKey>
      
