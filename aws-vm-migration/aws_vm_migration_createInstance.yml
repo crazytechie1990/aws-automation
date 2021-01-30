@@ -10,7 +10,7 @@
       - name: Find my AMI
         ec2_ami_info:
           filters:
-            "tag:Name": SachinAMI
+            "tag:Name": ansible_ami
         register: my_AMI
 
       - name: Debug
