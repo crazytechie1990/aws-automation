@@ -61,7 +61,7 @@
         
     - name: Use the following command to import an image with a single disk.
       shell: |
-        aws ec2 import-image --description "MyserverVM" --disk-containers "file://containers.json" --tag-specifications ResourceType=import-image-task,Tags="{Key=name,Value=ansible_ami}"
+        aws ec2 import-image --description "MyserverVM" --disk-containers "file://containers.json" --tag-specifications ResourceType=import-image-task,Tags="{Key=Name,Value=ansible_ami}"
       register: result
       tags:
           - import_ami
