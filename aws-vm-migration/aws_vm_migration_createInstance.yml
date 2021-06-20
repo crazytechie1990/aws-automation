@@ -23,7 +23,7 @@
            key_name: "{{ my_aws_key }}"
            name: Instance-Created-By-Ansible
            region: us-east-1
-           state: stopped
+           state: started
            termination_protection: yes
 
     rescue:
