@@ -4,7 +4,7 @@ VM Import/Export enables you to import virtual machine (VM) images from your exi
 
 Following AWS documentation and performing step by step is fine initially to attain knowledge. But when it comes to repeating the same task that's where it become tedious.
 
-Ansible automation can do anything to avoid boredum. This project has two playbooks , once for exporting your onsite your VM and then to import that VM as an AMI in to AWS.
+Ansible automation can do anything to avoid boredum. This project has two playbooks , once for exporting your onsite VM and then to import that VM as an AMI in to AWS.
 In addition I have pasted another playbook to launch an instance using the same AMI.
 
 # Requirements
